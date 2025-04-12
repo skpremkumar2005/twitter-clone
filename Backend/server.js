@@ -5,6 +5,7 @@ import ConnectDb from './db/db.connection.js'
 import cookieParser from 'cookie-parser';
 import UserRoute from './routes/userRoute.js';
 import PostRoute from './routes/postRoute.js'
+import NotificationRoute from './routes/notification.js';
 import cloudinary from 'cloudinary'
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
@@ -21,6 +22,7 @@ app.get('/',(req,res)=>{
 app.use('/api/auth/',Authrouter);
 app.use('/user/',UserRoute);
 app.use('/post',PostRoute)
+app.use('/notification',NotificationRoute)
 
 
 

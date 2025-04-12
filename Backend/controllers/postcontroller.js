@@ -150,3 +150,49 @@ export const deletepost=async(req,res)=>{
     }
 
 }
+export const getfollowingpost=async(req,res)=>{
+  try{
+    const userdetails= await User.findById(req.user._id);
+    if(!userdetails)return res.status(400).json({error:"user not found"})    
+    if(userdetails.followings.length===0)return res.status(200).json({message:"following not found"}) 
+    const followpost=await post.find({user:{$in:userdetails.followings}}).sort({createdAt:-1}).populate({
+      path:"user",
+      select:"-password"
+
+    }).populate({
+      path:"Comment.user",
+      select:'-password'
+    })
+
+    if(followpost.length===0)return res.status(200).json([])
+    res.status(200).json(followpost);
+
+  }
+  catch(e){
+      res.status(500).json({error:"internal server error",e:e});
+  }
+
+}
+export const Userposts=async(req,res)=>{
+  try{
+    const {username}= req.params;
+    const userdetails=await User.findOne({username:username})
+    if(!userdetails)return res.status(400).json({error:"user not found"})    
+    const followpost=await post.find({user:userdetails._id}).sort({createdAt:-1}).populate({
+      path:"user",
+      select:"-password"
+
+    }).populate({
+      path:"Comment.user",
+      select:'-password'
+    })
+
+    if(followpost.length===0)return res.status(200).json([])
+    res.status(200).json(followpost);
+
+  }
+  catch(e){
+      res.status(500).json({error:"internal server error",e:e});
+  }
+
+}
