@@ -16,13 +16,7 @@ import { url } from './constant/url';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 function App() {
-	useEffect(() => {
-		if ('serviceWorker' in navigator) {
-		  navigator.serviceWorker.register('/service-worker.js')
-			.then(reg => console.log('✅ Service Worker registered', reg))
-			.catch(err => console.error('❌ Service Worker registration failed:', err));
-		}
-	  }, []);
+	
 	const {data:authUser,isLoading}=useQuery({
 		queryKey:["authUser"],
 		queryFn:async()=>{
@@ -87,6 +81,13 @@ function App() {
 			<LoadingSpinner size='lg'/>
 		</div>
 	}
+	useEffect(() => {
+		if ('serviceWorker' in navigator) {
+		  navigator.serviceWorker.register('/service-worker.js')
+			.then(reg => console.log('✅ Service Worker registered', reg))
+			.catch(err => console.error('❌ Service Worker registration failed:', err));
+		}
+	  }, []);
 
 	return (
 		<div className='flex max-w-6xl mx-auto'>
