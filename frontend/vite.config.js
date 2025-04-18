@@ -7,6 +7,6 @@ export default defineConfig({
   ],
   server: {
     host: true, // Important: allows access from external devices
-    allowedHosts: ['.ngrok-free.app'], // Wildcard to allow all ngrok URLs
+    allowedHosts: ['.ngrok-free.app','twitter-clone-blkf.onrender.com'], // Wildcard to allow all ngrok URLs
   },
 })
