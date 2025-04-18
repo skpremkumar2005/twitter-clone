@@ -23,7 +23,7 @@ app.use(express.json({
 }))
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173', // replace with your frontend URL
+    origin: 'https://twitter-clone-blkf.onrender.com', // replace with your frontend URL
     credentials: true
 }))
 app.get('/',(req,res)=>{
