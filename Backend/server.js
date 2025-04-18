@@ -1,6 +1,6 @@
-dotenv.config();
 import express, { urlencoded } from 'express';
 import dotenv from 'dotenv';  // Corrected import
+dotenv.config();
 import Authrouter from './routes/auth.js';
 import ConnectDb from './db/db.connection.js'
 import cookieParser from 'cookie-parser';
