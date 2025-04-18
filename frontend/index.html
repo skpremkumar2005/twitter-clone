@@ -1,17 +1,44 @@
 <!doctype html>
 <html lang="en" data-theme="black">
- 
-
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!--  Add icons for PWA -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/twitter.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/twitter.png" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="./public/manifest.json" />
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#317EFB" />
+    
     <title>Vite + React</title>
   </head>
+
   <body>
     <div id="root"></div>
+    
+    <!-- Main JS file for your React app -->
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/service-worker.js')
+            .then((registration) => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('Service Worker registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
