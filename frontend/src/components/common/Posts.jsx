@@ -5,6 +5,7 @@ import { POSTS } from "../../utils/db/dummy";
 import { url } from "../../constant/url";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useFollow from "../../hooks/useFollow";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Posts = ({feedType,user,recommentuser}) => {
 	// const {data:suggesteduser,isPending}=useQuery({queryKey:["suggesteduser"]})
