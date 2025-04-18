@@ -23,7 +23,7 @@ app.use(express.json({
 }))
 app.use(cookieParser());
 app.use(cors({
-    origin: ['https://twitter-vite-build.onrender.com','https://twitter-clone-flame-five.vercel.app/'],
+    origin: 'https://twitter-clone-flame-five.vercel.app/',
      // replace with your frontend URL
     credentials: true
 }))
