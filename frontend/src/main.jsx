@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -16,12 +16,14 @@ import {
       }
     }
   })
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("./service-worker.jsx")
-      .then((reg) => console.log("Service Worker registered!", reg))
-      .catch((err) => console.error("Service Worker registration failed:", err));
-  }
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((reg) => console.log('✅ Service Worker registered', reg))
+        .catch((err) => console.error('❌ Service Worker registration failed:', err));
+    }
+  }, []);
+  
   
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
