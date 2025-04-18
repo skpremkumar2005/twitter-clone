@@ -20,13 +20,13 @@ function App() {
 		queryKey:["authUser"],
 		queryFn:async()=>{
 			try{
-				const res= await fetch(`${url}/api/auth/me`,{
-					method:"GET",
-					credentials:"include",
-					headers:{
-						"Content-Type":"application/json"
+				const res= await fetch('https://twitter-lite-m10m.onrender.com/api/auth/me', {
+					method: 'GET',
+					credentials: 'include', // 🍪 required to send cookie
+					headers: {
+					  'Content-Type': 'application/json'
 					}
-				})
+				  });
 				const data=await res.json();
 				if(data.error){
 					console.log(1)
