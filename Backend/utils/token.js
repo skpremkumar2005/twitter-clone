@@ -7,7 +7,7 @@ const generatetokens=(userId,res)=>{
         maxAge:10*24*60*1000,
         httpOnly:true,//xss 
         sameSite:'strict',//csrf
-        secure:process.env.NODE_ENV!=='development',
+        secure:process.env.NODE_ENV!=='developmen',
     })
 }
 export default generatetokens;
