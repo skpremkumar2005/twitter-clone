@@ -6,7 +6,7 @@ const generatetokens=(userId,res)=>{
     res.cookie("jwt",token,{
         maxAge:10*24*60*1000,
         httpOnly:true,//xss 
-        sameSite:'none',//csrf
+        sameSite:'strict',//csrf
         secure:true,
     })
 }
