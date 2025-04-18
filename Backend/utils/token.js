@@ -6,7 +6,7 @@ const generatetokens=(userId,res)=>{
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        domain: ".onrender.com", // 👈 This is the key change!
+        // domain: ".onrender.com", // 👈 This is the key change!
         maxAge: 10 * 24 * 60 * 60 * 1000
       });
       
