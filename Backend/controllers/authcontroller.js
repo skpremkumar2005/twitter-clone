@@ -44,12 +44,14 @@ export const signin= async(req,res)=>{
 
     }
     catch(e){
-     res.status(400).json(`error:${e}`);
+     res.status(400).json(`error:`);
     }
 }
 export const signup=async(req,res)=>{
     try{
    const {username,fullname,email,password}=req.body;
+  //  console.log(req.body);
+   if(!fullname||!email||!password||!username)return res.status(400).json({error:"credential missing"});
      const existingemail= await User.findOne({email})
      const existinguser=await User.findOne({username});
      if(existingemail||existinguser){
@@ -77,6 +79,7 @@ export const signup=async(req,res)=>{
 
     }
     catch(e){
+         res.status(500).json({error:"internal server error"})
         console.log(`error in sign up :${e}`);
     }
 }

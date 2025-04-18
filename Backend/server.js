@@ -1,4 +1,5 @@
-import express from 'express';
+dotenv.config();
+import express, { urlencoded } from 'express';
 import dotenv from 'dotenv';  // Corrected import
 import Authrouter from './routes/auth.js';
 import ConnectDb from './db/db.connection.js'
@@ -7,15 +8,24 @@ import UserRoute from './routes/userRoute.js';
 import PostRoute from './routes/postRoute.js'
 import NotificationRoute from './routes/notification.js';
 import cloudinary from 'cloudinary'
+import cors from 'cors';
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
     api_key:process.env.CLOUDINARY_API_KEY,
     api_secret:process.env.CLOUDINARY_SECRETE_KEY,
 })
 const app = express();
-app.use(express.json())
+app.use(urlencoded({
+    extended:true
+}))
+app.use(express.json({
+    limit:'5mb'
+}))
 app.use(cookieParser());
-dotenv.config();
+app.use(cors({
+    origin: 'http://localhost:5173', // replace with your frontend URL
+    credentials: true
+}))
 app.get('/',(req,res)=>{
     res.send('hi');
 })

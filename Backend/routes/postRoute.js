@@ -6,7 +6,7 @@ const Router=express.Router();
 Router.post('/create',protectRoute,create);
 Router.post('/like/:id',protectRoute,like);
 Router.get('/likedpost/:id',protectRoute,Likedposts);
-Router.get('/getAll/',protectRoute,Allposts);
+Router.get('/getAll',protectRoute,Allposts);
 Router.get('/userpost/:username',protectRoute,Userposts);
 Router.post('/comment/:id',protectRoute,comment);
 Router.delete('/:id',protectRoute,deletepost);

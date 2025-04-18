@@ -29,6 +29,7 @@ export const create=async(req,res)=>{
     }
     catch(e){
         res.status(500).json({error:"internal server error",e:e});
+        console.log(e);
     }
 
 }
@@ -67,8 +68,10 @@ export const like=async(req,res)=>{
 export const comment=async(req,res)=>{
     try{
       const {id}=req.params;
+      // console.log(id)
       const userId=req.user._id.toString();
       const {text}=req.body
+      // console.log(text)
       if(!text)return res.status(400).json({error:"text not found"});
       const Post=await post.findById(id);
       if(!Post)return res.status(400).json({error:"post not found"});
@@ -132,29 +135,35 @@ export const Allposts=async(req,res)=>{
   }
 
 }
-export const deletepost=async(req,res)=>{
-    try{
-    //   const {id}=req.params;
-    // console.log(req.params.id)
-      const userpost=await post.findById(req.params.id);
-      if(!userpost)return res.status(400).json({error:"post not found"});
-      if(userpost.user.toString()!==req.user._id.toString())return res.status(400).json({error:"the post not belongs to you so you cant delete"});
-      if(userpost.img){
-        await cloudinary.destroy(userpost.img.split('/').pop().split('.')[0])
-      }
-      await post.findByIdAndDelete(req.params.id);
-      res.status(200).json({message:"deleted sucessfully"});
-    }
-    catch(e){
-        res.status(500).json({error:"internal server error",e:e});
+
+export const deletepost = async (req, res) => {
+  try {
+    const userpost = await post.findById(req.params.id);
+    if (!userpost) return res.status(404).json({ error: "Post not found" });
+
+    if (userpost.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: "You don't have permission to delete this post." });
     }
 
-}
+    // Delete image from cloudinary
+    if (userpost.img) {
+      const publicId = userpost.img.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    // Delete post from DB
+    await post.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (e) {
+    console.error("Error deleting post:", e);
+    res.status(500).json({ error: "Internal server error", details: e.message });
+  }
+};
 export const getfollowingpost=async(req,res)=>{
   try{
     const userdetails= await User.findById(req.user._id);
     if(!userdetails)return res.status(400).json({error:"user not found"})    
-    if(userdetails.followings.length===0)return res.status(200).json({message:"following not found"}) 
+    if(userdetails.followings.length===0)return res.status(200).json([]) 
     const followpost=await post.find({user:{$in:userdetails.followings}}).sort({createdAt:-1}).populate({
       path:"user",
       select:"-password"

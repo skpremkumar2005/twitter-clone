@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import cloudinary from 'cloudinary';
 export const getProfile=async(req,res)=>{
     const {username}=req.params;
-    console.log(username);
+    
     try{
         const user= await User.findOne({username:username}).select("-password");
         if(!user){
@@ -71,50 +71,67 @@ export const getsuggesion=async(req,res)=>{
         res.status(500).json({error:"internal server error",e:e});
     }
 }
-export const updateProfile=async(req,res)=>{
-    try{
-        let user=await User.findOne({_id:req.user._id});
-        if(!user)return res.status(400).json({mesage:"user not found"});
-       let {username,fullname,email,currentpassword,newpassword,bio,link}=req.body;
-       let {coverImage,image}=req.body;
+export const updateProfile = async (req, res) => {
+	try {
+		let user = await User.findById(req.user._id);
+		if (!user) return res.status(400).json({ message: "User not found" });
 
-       if((!currentpassword&&newpassword)||(currentpassword&&!newpassword))return res.status(404).json({message:"require both current and new Password"});  
-    
-       if(currentpassword&&newpassword){
-        if(newpassword.length<6)return res.status(400).json({error:"minimum password length 6"});
-        const ismatch= await bcrypt.compare(currentpassword,user.password);
-        if(!ismatch){return res.status(400).json({error:"current password not match"})};
-        const salt=await bcrypt.genSalt(10);
-        user.password= await bcrypt.hash(newpassword,salt);
-       }
-    //   if(coverImage){
-    //     if(user.coverImage){await cloudinary.uploader.destroy(user.coverImage.split('/').pop().split('.')[0])}
-    //     const image=await cloudinary.uploader.upload(coverImage);
-    //      coverImage=image.secure_url;
-    //   }
-    //   if(image){
-    //     if(user.image){await cloudinary.uploader.destroy(user.image.split('/').pop().split('.')[0])}
-    //     const imageresponse=await cloudinary.uploader.upload(coverImage);
-    //     image=imageresponse.secure_url;
-    //   } 
-      user.username=username||user.username;
-      user.email=email||user.email;
-      user.fullname=fullname||user.fullname;
-      user.bio=bio||user.bio;
-      user.link=link||user.link;
-      user.image=image||user.image;
-      user.coverImage=coverImage||user.coverImage;
+		let {
+			username,
+			fullname,
+			email,
+			currentpassword,
+			newpassword,
+			bio,
+			link,
+			coverImage,
+			image,
+		} = req.body;
 
-      user =await user.save();
-      return res.status(200).json({message:"updated successfully",userdate:user});
+		if ((currentpassword && !newpassword) || (!currentpassword && newpassword)) {
+			return res.status(400).json({ error: "Both current and new password are required" });
+		}
 
-       
+		if (currentpassword && newpassword) {
+			if (newpassword.length < 6) {
+				return res.status(400).json({ error: "Password must be at least 6 characters" });
+			}
+			const isMatch = await bcrypt.compare(currentpassword, user.password);
+			if (!isMatch) return res.status(400).json({ error: "Current password is incorrect" });
 
-    }
-    catch(e){
-        res.status(500).json({error:"internal server error",erroroccure:e});
+			const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(newpassword, salt);
+		}
 
-    }
-}
+		if (coverImage) {
+			if (user.coverImage) {
+				await cloudinary.uploader.destroy(user.coverImage.split('/').pop().split('.')[0]);
+			}
+			const response = await cloudinary.uploader.upload(coverImage);
+			coverImage = response.secure_url;
+		}
 
+		if (image) {
+			if (user.image) {
+				await cloudinary.uploader.destroy(user.image.split('/').pop().split('.')[0]);
+			}
+			const response = await cloudinary.uploader.upload(image);
+			image = response.secure_url;
+		}
+        
 
+		user.username = username || user.username;
+		user.email = email || user.email;
+		user.fullname = fullname || user.fullname;
+		user.bio = bio || user.bio;
+		user.link = link || user.link;
+		user.image = image || user.image;
+		user.coverImage = coverImage || user.coverImage;
+
+		await user.save();
+		res.status(200).json({ message: "Updated successfully", userData: user });
+	} catch (e) {
+		console.error(e);
+		res.status(500).json({ error: "Internal server error", errorDetails: e.message });
+	}
+};

@@ -7,15 +7,15 @@ const protectRoute=async(req,res,next)=>{
     const token =req.cookies.jwt;
     // console.log(token);
     if(!token){
-        return res.status(401).json({success:false,message:"Please login to access this route"});
+        return res.status(401).json({success:false,error:"Please login to access this route"});
     }
         const decode = jwt.verify(token,process.env.jwt);
         if(!decode){
-            return res.status(401).json({message:"Invalid token"});
+            return res.status(401).json({error:"Invalid token"});
         }
         const user = await User.findOne({_id:decode.userId}).select("-password");
         if(!user){
-            return res.status(401).json({message:"invalid token user not found"});
+            return res.status(401).json({error:"invalid token user not found"});
         }
         req.user=user;
     
