@@ -1,10 +1,10 @@
 {
-    "name": "My Awesome App",
-    "short_name": "AwesomeApp",
-    "start_url": ".",
+    "name": "Twitter Clone",
+    "short_name": "Twitter",
+    "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#317EFB",
+    "background_color": "#000000",
+    "theme_color": "#1da1f2",
     "icons": [
       {
         "src": "/icons/icon-192.png",
