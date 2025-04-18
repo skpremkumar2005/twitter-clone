@@ -14,44 +14,38 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Fix CORS FIRST (very important order)
-const FRONTEND_URL = 'https://twitter-clone-flame-five.vercel.app';
+// ✅ 1. Trust proxy (very important for Render)
+app.set('trust proxy', 1);
 
+// ✅ 2. CORS setup
+const FRONTEND_URL = 'https://twitter-clone-flame-five.vercel.app';
 app.use(cors({
   origin: FRONTEND_URL,
   credentials: true
 }));
 
-// ✅ Explicitly allow credentials in response headers
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', FRONTEND_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
-// ✅ Cookie and JSON parsing
+// ✅ 3. Middleware
 app.use(urlencoded({ extended: true }));
 app.use(express.json({ limit: '5mb' }));
 app.use(cookieParser());
 
-// ✅ Cloudinary config
+// ✅ 4. Cloudinary setup
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET_KEY, // 🔧 Fix typo here
+  api_secret: process.env.CLOUDINARY_SECRETE_KEY, // typo fix if needed
 });
 
-// ✅ API routes
+// ✅ 5. Routes
 app.get('/', (req, res) => res.send('Server is running'));
 app.use('/api/auth', Authrouter);
 app.use('/user', UserRoute);
 app.use('/post', PostRoute);
 app.use('/notification', NotificationRoute);
 
-// ✅ Port and DB connection
+// ✅ 6. Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
   ConnectDb();
 });
-
