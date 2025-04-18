@@ -5,7 +5,7 @@ import User from '../models/usermodels.js';
 const protectRoute=async(req,res,next)=>{
    try{
     const token =req.cookies.jwt;
-    // console.log(token);
+    console.log(token);
     if(!token){
         return res.status(401).json({success:false,error:"Please login to access this route"});
     }
