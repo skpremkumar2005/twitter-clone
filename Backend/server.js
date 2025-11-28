@@ -19,7 +19,11 @@ app.set('trust proxy', 1);
 
 // ✅ 2. CORS setup
 const FRONTEND_URL = 'https://twitter-clone-flame-five.vercel.app';
-app.use(cors());
+
+app.use(cors({
+  origin: FRONTEND_URL,
+  credentials: true
+}));
 
 // ✅ 3. Middleware
 app.use(urlencoded({ extended: true }));
